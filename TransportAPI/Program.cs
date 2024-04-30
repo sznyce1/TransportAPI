@@ -1,3 +1,4 @@
+using System.Reflection;
 using TransportAPI.Entities;
 
 namespace TransportAPI
@@ -13,6 +14,7 @@ namespace TransportAPI
             builder.Services.AddControllers();
             builder.Services.AddDbContext<TransportDbContext>();
             builder.Services.AddScoped<TransportSeeder>();
+            builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             var app = builder.Build();
 
