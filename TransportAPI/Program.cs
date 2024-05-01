@@ -1,5 +1,6 @@
 using System.Reflection;
 using TransportAPI.Entities;
+using TransportAPI.Services;
 
 namespace TransportAPI
 {
@@ -15,6 +16,7 @@ namespace TransportAPI
             builder.Services.AddDbContext<TransportDbContext>();
             builder.Services.AddScoped<TransportSeeder>();
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            builder.Services.AddScoped<IRunService, RunService>();
 
             var app = builder.Build();
 

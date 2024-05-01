@@ -8,9 +8,9 @@ namespace TransportAPI.Models
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         [Required]
-        [MaxLength(5)]
+        [Range(0,99999)]
         public double Distance { get; set; }
-        [MaxLength(5)]
+        [Range(0, 100)]
         public double? AverageFuelConsumption { get; set; }
         [Required]
         [MaxLength(20)]

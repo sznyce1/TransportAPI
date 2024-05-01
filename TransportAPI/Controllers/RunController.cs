@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TransportAPI.Entities;
 using TransportAPI.Models;
+using TransportAPI.Services;
 
 namespace TransportAPI.Controllers
 {
@@ -11,10 +12,11 @@ namespace TransportAPI.Controllers
     {
         private readonly TransportDbContext _dbcontext;
         private readonly IMapper _mapper;
-        public RunController(TransportDbContext dbContext, IMapper mapper)
+        private readonly IRunService _runService;
+
+        public RunController(IRunService runService)
         {
-            _dbcontext = dbContext;
-            _mapper = mapper;
+            _runService = runService;
         }
         [HttpPost]
         public ActionResult CreateRun([FromBody] CreateRunDto dto)
@@ -23,42 +25,27 @@ namespace TransportAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var run = _mapper.Map<Run>(dto);
-            _dbcontext.Add(run);
-            _dbcontext.SaveChanges();
+            var id = _runService.Create(dto);
 
-            return Created($"/api/run/{run.Id}",null);
+            return Created($"/api/run/{id}",null);
         }
         [HttpGet]
         public ActionResult<IEnumerable<RunDto>> GetAll()
         {
-            var runs = _dbcontext
-                .Runs
-                .Include(r => r.Car)
-                .Include(r => r.Driver)
-                .ToList();
-            var rundsDtos = _mapper.Map<List<RunDto>>(runs);
-            return Ok(rundsDtos);
+            var runsDtos = _runService.GetAll();
+            return Ok(runsDtos);
         }
         [HttpGet("{id}")]
         public ActionResult<RunDto> Get([FromRoute]int id)
         {
-            var run = _dbcontext
-                .Runs
-                .Include(r => r.Car)
-                .Include(r => r.Driver)
-                .FirstOrDefault(r => r.Id == id);
-
-            if (run is not null) 
-            {
-                var runDto = _mapper.Map<RunDto>(run);
-                return Ok(runDto);
-            }
-            else
+            var run = _runService.GetById(id);
+            if (run is null) 
             {
                 return NotFound();
+                
             }
-            
+            return Ok(run);
+
         }
     }
 }
