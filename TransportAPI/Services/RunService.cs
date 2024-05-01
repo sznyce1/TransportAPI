@@ -10,6 +10,7 @@ namespace TransportAPI.Services
         int Create(CreateRunDto dto);
         IEnumerable<RunDto> GetAll();
         RunDto GetById(int id);
+        bool Delete(int id);
     }
 
     public class RunService : IRunService
@@ -56,6 +57,19 @@ namespace TransportAPI.Services
             _dbContext.SaveChanges();
 
             return run.Id;
+        }
+        public bool Delete(int id)
+        {
+            var run = _dbContext
+                .Runs
+                .FirstOrDefault(r => r.Id == id);
+            if(run is null)
+            {
+                return false;
+            }
+            _dbContext.Runs.Remove(run);
+            _dbContext.SaveChanges(); 
+            return true;
         }
     }
 }

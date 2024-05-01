@@ -18,6 +18,19 @@ namespace TransportAPI.Controllers
         {
             _runService = runService;
         }
+        [HttpDelete("{id}")]
+        public ActionResult Delete([FromRoute]int id)
+        {
+            bool isDeleted = _runService.Delete(id);
+            if (isDeleted)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
         [HttpPost]
         public ActionResult CreateRun([FromBody] CreateRunDto dto)
         {
@@ -45,7 +58,7 @@ namespace TransportAPI.Controllers
                 
             }
             return Ok(run);
-
         }
+
     }
 }
