@@ -16,6 +16,19 @@ namespace TransportAPI.Controllers
             _dbcontext = dbContext;
             _mapper = mapper;
         }
+        [HttpPost]
+        public ActionResult CreateRun([FromBody] CreateRunDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var run = _mapper.Map<Run>(dto);
+            _dbcontext.Add(run);
+            _dbcontext.SaveChanges();
+
+            return Created($"/api/run/{run.Id}",null);
+        }
         [HttpGet]
         public ActionResult<IEnumerable<RunDto>> GetAll()
         {
