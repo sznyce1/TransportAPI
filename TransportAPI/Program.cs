@@ -1,5 +1,6 @@
 using System.Reflection;
 using TransportAPI.Entities;
+using TransportAPI.Middleware;
 using TransportAPI.Services;
 
 namespace TransportAPI
@@ -17,18 +18,18 @@ namespace TransportAPI
             builder.Services.AddScoped<TransportSeeder>();
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
             builder.Services.AddScoped<IRunService, RunService>();
+            builder.Services.AddScoped<ErrorHandllingMiddleware>();
 
             var app = builder.Build();
 
             var scope = app.Services.CreateScope();
             var seeder = scope.ServiceProvider.GetService<TransportSeeder>();
             seeder.Seed();
+
             // Configure the HTTP request pipeline.
 
+            app.UseMiddleware<ErrorHandllingMiddleware>();
             app.UseHttpsRedirection();
-
-            //app.UseAuthorization();
-
             app.MapControllers();
 
             
