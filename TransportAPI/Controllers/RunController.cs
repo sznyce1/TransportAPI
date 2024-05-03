@@ -8,6 +8,7 @@ using TransportAPI.Services;
 namespace TransportAPI.Controllers
 {
     [Route("api/run")]
+    [ApiController]
     public class RunController : ControllerBase
     {
         private readonly TransportDbContext _dbcontext;
@@ -22,39 +23,22 @@ namespace TransportAPI.Controllers
         [HttpPut("{id}")]
         public ActionResult Update([FromBody] UpdateRunDto dto, [FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var updated = _runService.Update(id, dto);
-            if (updated)
-            {
-                return Ok();
-            }
-            return NotFound();
+            _runService.Update(id, dto);
+            
+            return Ok();
+            
         }
 
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute]int id)
         {
-            bool isDeleted = _runService.Delete(id);
-            if (isDeleted)
-            {
-                return NoContent();
-            }
-            else
-            {
-                return NotFound();
-            }
+            _runService.Delete(id);
+             return NoContent();
         }
 
         [HttpPost]
         public ActionResult CreateRun([FromBody] CreateRunDto dto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             var id = _runService.Create(dto);
 
             return Created($"/api/run/{id}",null);
@@ -71,11 +55,7 @@ namespace TransportAPI.Controllers
         public ActionResult<RunDto> Get([FromRoute]int id)
         {
             var run = _runService.GetById(id);
-            if (run is null) 
-            {
-                return NotFound();
-                
-            }
+
             return Ok(run);
         }
 

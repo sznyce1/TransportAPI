@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Data.Common;
+using TransportAPI.Exceptions;
 
 namespace TransportAPI.Middleware
 {
@@ -12,16 +13,22 @@ namespace TransportAPI.Middleware
             {
                 await next.Invoke(context);
             }
+            catch(NotFoundException e)
+            {
+                context.Response.StatusCode = 404;
+                await context.Response.WriteAsync($"{e.Message}");
+            }
+            catch(SqlException e)
+            {
+                context.Response.StatusCode = 500;
+                await context.Response.WriteAsync($"Database error");
+            }
             catch (Exception e)
             {
-                var message = $"";
-                if (e.InnerException is SqlException)
-                {
-                    message = $"Database error.";
-                } 
                 context.Response.StatusCode = 500;
-                await context.Response.WriteAsync($"Something went wrong. {message}");
+                await context.Response.WriteAsync($"Something went wrong");
             }
+            
         }
     }
 }

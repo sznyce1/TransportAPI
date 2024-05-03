@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TransportAPI.Entities;
+using TransportAPI.Exceptions;
 using TransportAPI.Models;
 
 namespace TransportAPI.Services
@@ -10,8 +11,8 @@ namespace TransportAPI.Services
         int Create(CreateRunDto dto);
         IEnumerable<RunDto> GetAll();
         RunDto GetById(int id);
-        bool Delete(int id);
-        public bool Update(int id, UpdateRunDto dto);
+        void Delete(int id);
+        void Update(int id, UpdateRunDto dto);
     }
 
     public class RunService : IRunService
@@ -38,7 +39,7 @@ namespace TransportAPI.Services
             }
             else
             {
-                return null;
+                throw new NotFoundException("Run not found");
             }
         }
         public IEnumerable<RunDto> GetAll()
@@ -53,33 +54,62 @@ namespace TransportAPI.Services
         }
         public int Create(CreateRunDto dto)
         {
+            var car = _dbContext
+                .Cars
+                .FirstOrDefault(r => r.Id == dto.CarId);
+            if (car == null)
+            {
+                throw new NotFoundException("Car not found");
+            }
+            var driver = _dbContext
+                .Drivers
+                .FirstOrDefault(r => r.Id == dto.DriverId);
+            if (driver == null)
+            {
+                throw new NotFoundException("Driver not found");
+            }
+                
             var run = _mapper.Map<Run>(dto);
             _dbContext.Add(run);
             _dbContext.SaveChanges();
 
             return run.Id;
         }
-        public bool Delete(int id)
+        public void Delete(int id)
         {
             var run = _dbContext
                 .Runs
                 .FirstOrDefault(r => r.Id == id);
             if(run is null)
             {
-                return false;
+                throw new NotFoundException("Run not found");
             }
             _dbContext.Runs.Remove(run);
             _dbContext.SaveChanges(); 
-            return true;
+
         }
-        public bool Update(int id, UpdateRunDto dto)
+        public void Update(int id, UpdateRunDto dto)
         {
             var run = _dbContext
                 .Runs
                 .FirstOrDefault(r => r.Id == id);
             if (run is null)
             {
-                return false;
+                throw new NotFoundException("Run not found");
+            }
+            var car = _dbContext
+                .Cars
+                .FirstOrDefault(r => r.Id == dto.CarId);
+            if (car == null)
+            {
+                throw new NotFoundException("Car not found");
+            }
+            var driver = _dbContext
+                .Drivers
+                .FirstOrDefault(r => r.Id == dto.DriverId);
+            if (driver == null)
+            {
+                throw new NotFoundException("Driver not found");
             }
             run.CarId = dto.CarId;
             run.DriverId = dto.DriverId;
@@ -89,7 +119,6 @@ namespace TransportAPI.Services
             run.AverageFuelConsumption = dto.AverageFuelConsumption;
 
             _dbContext .SaveChanges();
-            return true;
         }
     }
 }
