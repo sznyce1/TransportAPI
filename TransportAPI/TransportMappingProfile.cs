@@ -15,13 +15,7 @@ namespace TransportAPI
                 .ForMember(m => m.RegistrationNumber, c => c.MapFrom(s => s.Car.RegistrationNumber));
             CreateMap<Car, CarDto>();
             CreateMap<Driver,DriverDto>();
-
-            CreateMap<CreateRunDto, Run>().ForMember(m => m.Driver,
-                c=> c.MapFrom(dto => new Driver()
-                { Name = dto.Name,SecondName=dto.SecondName, DrivingCategories = dto.DrivingCategories}))
-                .ForMember(m=>m.Car,
-                c=>c.MapFrom(dto=>new Car()
-                { Model=dto.Model,RegistrationNumber = dto.RegistrationNumber, CarType = dto.CarType }));
+            CreateMap<CreateRunDto, Run>();
         }
     }
 }

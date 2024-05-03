@@ -11,6 +11,7 @@ namespace TransportAPI.Services
         IEnumerable<RunDto> GetAll();
         RunDto GetById(int id);
         bool Delete(int id);
+        public bool Update(int id, UpdateRunDto dto);
     }
 
     public class RunService : IRunService
@@ -69,6 +70,25 @@ namespace TransportAPI.Services
             }
             _dbContext.Runs.Remove(run);
             _dbContext.SaveChanges(); 
+            return true;
+        }
+        public bool Update(int id, UpdateRunDto dto)
+        {
+            var run = _dbContext
+                .Runs
+                .FirstOrDefault(r => r.Id == id);
+            if (run is null)
+            {
+                return false;
+            }
+            run.CarId = dto.CarId;
+            run.DriverId = dto.DriverId;
+            run.StartDate = dto.StartDate;
+            run.EndDate = dto.EndDate;
+            run.Distance = dto.Distance;
+            run.AverageFuelConsumption = dto.AverageFuelConsumption;
+
+            _dbContext .SaveChanges();
             return true;
         }
     }

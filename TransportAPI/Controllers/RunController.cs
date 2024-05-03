@@ -18,6 +18,22 @@ namespace TransportAPI.Controllers
         {
             _runService = runService;
         }
+
+        [HttpPut("{id}")]
+        public ActionResult Update([FromBody] UpdateRunDto dto, [FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var updated = _runService.Update(id, dto);
+            if (updated)
+            {
+                return Ok();
+            }
+            return NotFound();
+        }
+
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute]int id)
         {
@@ -31,6 +47,7 @@ namespace TransportAPI.Controllers
                 return NotFound();
             }
         }
+
         [HttpPost]
         public ActionResult CreateRun([FromBody] CreateRunDto dto)
         {
@@ -42,12 +59,14 @@ namespace TransportAPI.Controllers
 
             return Created($"/api/run/{id}",null);
         }
+
         [HttpGet]
         public ActionResult<IEnumerable<RunDto>> GetAll()
         {
             var runsDtos = _runService.GetAll();
             return Ok(runsDtos);
         }
+
         [HttpGet("{id}")]
         public ActionResult<RunDto> Get([FromRoute]int id)
         {
