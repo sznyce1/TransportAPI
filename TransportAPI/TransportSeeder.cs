@@ -1,4 +1,5 @@
-﻿using TransportAPI.Entities;
+﻿using Microsoft.Data.SqlClient;
+using TransportAPI.Entities;
 
 namespace TransportAPI
 {
@@ -19,6 +20,10 @@ namespace TransportAPI
                     _dbContext.Runs.AddRange(Runs);
                     _dbContext.SaveChanges();
                 }
+            }
+            else
+            {
+                throw new Exception("Databse error");
             }
         }
         private IEnumerable<Run> GetRuns()
