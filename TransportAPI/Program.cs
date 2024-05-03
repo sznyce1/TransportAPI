@@ -19,6 +19,7 @@ namespace TransportAPI
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
             builder.Services.AddScoped<IRunService, RunService>();
             builder.Services.AddScoped<ErrorHandllingMiddleware>();
+            builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
 
@@ -30,6 +31,13 @@ namespace TransportAPI
 
             app.UseMiddleware<ErrorHandllingMiddleware>();
             app.UseHttpsRedirection();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Transport API");
+            });
+
             app.MapControllers();
 
             
