@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.Json.Serialization;
 using TransportAPI.Entities;
 using TransportAPI.Middleware;
 using TransportAPI.Services;
@@ -18,8 +19,12 @@ namespace TransportAPI
             builder.Services.AddScoped<TransportSeeder>();
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
             builder.Services.AddScoped<IRunService, RunService>();
+            builder.Services.AddScoped<IDriverService, DriverService>();
             builder.Services.AddScoped<ErrorHandllingMiddleware>();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
             var app = builder.Build();
 
