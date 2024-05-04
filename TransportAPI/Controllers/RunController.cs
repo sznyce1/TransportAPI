@@ -11,8 +11,6 @@ namespace TransportAPI.Controllers
     [ApiController]
     public class RunController : ControllerBase
     {
-        private readonly TransportDbContext _dbcontext;
-        private readonly IMapper _mapper;
         private readonly IRunService _runService;
 
         public RunController(IRunService runService)

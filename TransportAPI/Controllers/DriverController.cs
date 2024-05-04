@@ -14,32 +14,36 @@ namespace TransportAPI.Controllers
         {
             _driverService = driverService;
         }
+
         [HttpGet]
         public ActionResult<IEnumerable<DriverDto>> GetAll()
         {
             var drivers = _driverService.GetAll();
             return Ok(drivers);
         }
+
         [HttpGet("{id}")]
-        public ActionResult<DriverDto> GetById([FromRoute]int id)
+        public ActionResult<DriverDto> Get([FromRoute]int id)
         {
             var driver = _driverService.GetById(id);
             return Ok(driver);
         }
+
         [HttpPost]
         public ActionResult CreateDriver([FromBody] CreateDriverDto dto)
         {
             var id = _driverService.Create(dto);
             return Created($"/api/driver/{id}", null);
         }
+
         [HttpPut("{id}")]
         public ActionResult Update([FromBody] UpdateDriverDto dto, [FromRoute] int id)
         {
             _driverService.Update(id, dto);
 
             return Ok();
-
         }
+
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
