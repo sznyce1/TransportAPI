@@ -8,6 +8,6 @@ namespace TransportAPI.Entities
         public string Model { get; set; }
         public string RegistrationNumber { get; set; }
         public string CarType { get; set; }
-        public virtual List<Run> Runs { get; set; }
+        public virtual List<Run>? Runs { get; set; }
     }
 }

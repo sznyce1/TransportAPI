@@ -6,6 +6,6 @@
         public string Name { get; set; }
         public string SecondName { get; set; }
         public string DrivingCategories { get; set; }
-        public virtual List<Run> Runs { get; set; }
+        public virtual List<Run>? Runs { get; set; }
     }
 }

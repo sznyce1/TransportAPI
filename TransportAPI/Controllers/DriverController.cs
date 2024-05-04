@@ -20,5 +20,17 @@ namespace TransportAPI.Controllers
             var drivers = _driverService.GetAll();
             return Ok(drivers);
         }
+        [HttpGet("{id}")]
+        public ActionResult<DriverDto> GetById([FromRoute]int id)
+        {
+            var driver = _driverService.GetById(id);
+            return Ok(driver);
+        }
+        [HttpPost]
+        public ActionResult CreateDriver([FromBody] CreateDriverDto dto)
+        {
+            var id = _driverService.Create(dto);
+            return Created($"/api/driver/{id}", null);
+        }
     }
 }

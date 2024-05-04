@@ -16,6 +16,7 @@ namespace TransportAPI
             CreateMap<Car, CarDto>();
             CreateMap<Driver,DriverDto>();
             CreateMap<CreateRunDto, Run>();
+            CreateMap<CreateDriverDto, Driver>();
         }
     }
 }

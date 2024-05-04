@@ -12,9 +12,7 @@ namespace TransportAPI.Models
         public double Distance { get; set; }
         [Range(0, 100)]
         public double? AverageFuelConsumption { get; set; }
-        [Required]
         public int CarId { get; set; }
-        [Required]
         public int DriverId { get; set; }
     }
 }
