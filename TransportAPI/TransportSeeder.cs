@@ -68,7 +68,7 @@ namespace TransportAPI
             {
                 Model = "TestModel",
                 RegistrationNumber = "SK-111555",
-                CarType = "Motocycle"
+                CarType = "Motorcycle"
             };
         }
     }

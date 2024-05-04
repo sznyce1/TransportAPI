@@ -23,6 +23,10 @@ namespace TransportAPI.Middleware
                 context.Response.StatusCode = 401;
                 await context.Response.WriteAsync($"Invalid driving licence");
             }
+            catch (InvalidCarTypeException e)
+            {
+                await context.Response.WriteAsync($"Invalid car type");
+            }
             catch (SqlException e)
             {
                 context.Response.StatusCode = 500;

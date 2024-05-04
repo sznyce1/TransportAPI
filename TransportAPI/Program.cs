@@ -20,6 +20,7 @@ namespace TransportAPI
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
             builder.Services.AddScoped<IRunService, RunService>();
             builder.Services.AddScoped<IDriverService, DriverService>();
+            builder.Services.AddScoped<ICarService, CarService>();
             builder.Services.AddScoped<ErrorHandllingMiddleware>();
             builder.Services.AddSwaggerGen();
 

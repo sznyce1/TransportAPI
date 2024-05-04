@@ -59,8 +59,8 @@ namespace TransportAPI.Services
 
         public int Create(CreateDriverDto dto)
         {
-            var driver = _mapper.Map<Driver>(dto);
             ValidateLicence(dto.DrivingCategories);
+            var driver = _mapper.Map<Driver>(dto);
             _dbContext.Add(driver);
             _dbContext.SaveChanges();
             return driver.Id;
@@ -68,14 +68,14 @@ namespace TransportAPI.Services
 
         public void Update([FromRoute] int id, [FromBody] UpdateDriverDto dto)
         {
+            ValidateLicence(dto.DrivingCategories);
             var driver = _dbContext
                 .Drivers
                 .FirstOrDefault(r => r.Id == id);
             if (driver == null)
             {
                 throw new NotFoundException("Driver not found");
-            }
-            ValidateLicence(dto.DrivingCategories);
+            }            
             driver.Name = dto.Name;
             driver.SecondName = dto.SecondName;
             driver.DrivingCategories = dto.DrivingCategories;
