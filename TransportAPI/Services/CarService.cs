@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using TransportAPI.Entities;
 using TransportAPI.Exceptions;
 using TransportAPI.Models;
@@ -44,6 +45,7 @@ namespace TransportAPI.Services
             var result = _mapper.Map<CarDto>(car);
             return result;
         }
+
         public int Create(CreateCarDto dto)
         {
             ValidateCarType(dto.CarType);
@@ -52,6 +54,7 @@ namespace TransportAPI.Services
             _dbContext.SaveChanges();
             return car.Id;
         }
+
         public void Update(int id, UpdateCarDto dto)
         {
             ValidateCarType(dto.CarType);
@@ -67,6 +70,28 @@ namespace TransportAPI.Services
             car.CarType = dto.CarType;
             _dbContext.SaveChanges();
         }
+        
+        public void Delete(int id)
+        {
+            var car  = _dbContext
+                .Cars
+                .Include (r => r.Runs) 
+                .FirstOrDefault(r => r.Id == id);
+            if (car == null)
+            {
+                throw new NotFoundException("Car no found");
+            }
+            if (!car.Runs.IsNullOrEmpty())
+            {
+                foreach(Run run in car.Runs)
+                {
+                    run.CarId = null;
+                }
+            }
+            _dbContext.Cars.Remove(car);
+            _dbContext.SaveChanges();
+        }
+
         private void ValidateCarType(string type)
         {
             type = type.ToLower();

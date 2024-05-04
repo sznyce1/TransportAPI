@@ -40,6 +40,11 @@ namespace TransportAPI.Controllers
             _carService.Update(id, dto);
             return Ok();
         }
+        [HttpDelete("{id}")]
+        public ActionResult Delete([FromRoute] int id)
+        {
+            return NoContent();
+        }
 
 
     }

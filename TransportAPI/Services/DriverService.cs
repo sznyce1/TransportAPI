@@ -92,7 +92,7 @@ namespace TransportAPI.Services
             {
                 throw new NotFoundException("Driver not found");
             }
-            if(driver.Runs is not null)
+            if(!driver.Runs.IsNullOrEmpty())
             {
                 foreach (Run run in driver.Runs)
                 {
