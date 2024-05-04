@@ -14,7 +14,9 @@ namespace TransportAPI.Services
         public DriverDto GetById(int id);
         public int Create(CreateDriverDto dto);
         public void Update([FromRoute] int id, [FromBody] UpdateDriverDto dto);
+        public void Delete(int id);
     }
+
     public class DriverService : IDriverService
     {
         private readonly TransportDbContext _dbContext;
@@ -24,6 +26,7 @@ namespace TransportAPI.Services
             _dbContext = dbContext;
             _mapper = mapper;
         }
+
         public IEnumerable<DriverDto> GetAll()
         {
             var drivers = _dbContext
@@ -33,12 +36,14 @@ namespace TransportAPI.Services
             var results = _mapper.Map<List<DriverDto>>(drivers);
             return results;
         }
+
         public DriverDto GetById(int id)
         {
             var driver = GetDriver(id);
             var result = _mapper.Map<DriverDto>(driver);
             return result;
         }
+
         private Driver GetDriver(int id)
         {
             var driver = _dbContext
@@ -51,6 +56,7 @@ namespace TransportAPI.Services
             }
             return driver;
         }
+
         public int Create(CreateDriverDto dto)
         {
             var driver = _mapper.Map<Driver>(dto);
@@ -59,6 +65,7 @@ namespace TransportAPI.Services
             _dbContext.SaveChanges();
             return driver.Id;
         }
+
         public void Update([FromRoute] int id, [FromBody] UpdateDriverDto dto)
         {
             var driver = _dbContext
@@ -74,6 +81,29 @@ namespace TransportAPI.Services
             driver.DrivingCategories = dto.DrivingCategories;
             _dbContext.SaveChanges();
         }
+
+        public void Delete(int id)
+        {
+            var driver = _dbContext
+                .Drivers
+                .Include(r => r.Runs)
+                .FirstOrDefault(r => r.Id == id);
+            if(driver == null)
+            {
+                throw new NotFoundException("Driver not found");
+            }
+            if(driver.Runs is not null)
+            {
+                foreach (Run run in driver.Runs)
+                {
+                    run.DriverId = null;
+                }
+            }
+            _dbContext.Drivers.Remove(driver);
+
+            _dbContext.SaveChanges();
+        }
+
         private void ValidateLicence(string licence)
         {
             licence = licence.ToLower().Trim();
