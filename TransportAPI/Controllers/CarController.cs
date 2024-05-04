@@ -23,16 +23,22 @@ namespace TransportAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult Get([FromRoute]int id)
+        public ActionResult Get([FromRoute] int id)
         {
             var car = _carService.GetById(id);
             return Ok(car);
         }
         [HttpPost]
-        public ActionResult Create([FromBody ] CreateCarDto dto)
+        public ActionResult Create([FromBody] CreateCarDto dto)
         {
             var id = _carService.Create(dto);
             return Created($"api/car/{id}", null);
+        }
+        [HttpPut("{id}")]
+        public ActionResult Update([FromBody] UpdateCarDto dto, [FromRoute] int id)
+        {
+            _carService.Update(id, dto);
+            return Ok();
         }
 
 

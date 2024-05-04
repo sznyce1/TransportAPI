@@ -11,6 +11,7 @@ namespace TransportAPI.Services
         IEnumerable<CarDto> GetAll();
         public CarDto GetById(int id);
         public int Create(CreateCarDto dto);
+        public void Update(int id, UpdateCarDto dto);
     }
 
     public class CarService : ICarService
@@ -51,9 +52,20 @@ namespace TransportAPI.Services
             _dbContext.SaveChanges();
             return car.Id;
         }
-        public void Update(UpdateCarDto dto)
+        public void Update(int id, UpdateCarDto dto)
         {
-
+            ValidateCarType(dto.CarType);
+            var car = _dbContext
+                .Cars
+                .FirstOrDefault(r => r.Id == id);
+            if (car == null)
+            {
+                throw new NotFoundException("Car not found");
+            }
+            car.Model = dto.Model;
+            car.RegistrationNumber = dto.RegistrationNumber;
+            car.CarType = dto.CarType;
+            _dbContext.SaveChanges();
         }
         private void ValidateCarType(string type)
         {
