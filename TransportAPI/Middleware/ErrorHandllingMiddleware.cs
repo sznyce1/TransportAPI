@@ -20,7 +20,7 @@ namespace TransportAPI.Middleware
             }
             catch (InvalidDrivingLicenceException e)
             {
-                context.Response.StatusCode = 500;
+                context.Response.StatusCode = 401;
                 await context.Response.WriteAsync($"Invalid driving licence");
             }
             catch (SqlException e)

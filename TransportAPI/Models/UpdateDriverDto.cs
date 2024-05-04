@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TransportAPI.Entities;
 
 namespace TransportAPI.Models
 {
@@ -13,6 +14,5 @@ namespace TransportAPI.Models
         [Required]
         [MaxLength(4)]
         public string DrivingCategories { get; set; }
-        public List<RunDto>? Runs { get; set; }
     }
 }
