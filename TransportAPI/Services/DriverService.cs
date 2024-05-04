@@ -111,7 +111,7 @@ namespace TransportAPI.Services
             {
                 if (c != 'a' && c != 'b' && c != 'c' && c != 'd')
                 {
-                    throw new InvalidDrivingLicenceException();
+                    throw new InvalidArgumentException("Invalid driving licence");
                 }
             }
         }

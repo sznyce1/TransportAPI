@@ -60,7 +60,7 @@ namespace TransportAPI.Services
             type = type.ToLower();
             if(!(type.Contains("motorcycle") || type.Contains("passenger car") || type.Contains("truck") || type.Contains("bus")))
             {
-                throw new InvalidCarTypeException();
+                throw new InvalidArgumentException("Invalid car type");
             }
         }
 
