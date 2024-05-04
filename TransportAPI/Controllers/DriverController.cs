@@ -32,5 +32,14 @@ namespace TransportAPI.Controllers
             var id = _driverService.Create(dto);
             return Created($"/api/driver/{id}", null);
         }
+        [HttpPut("{id}")]
+        public ActionResult Update([FromBody] UpdateDriverDto dto, [FromRoute] int id)
+        {
+            _driverService.Update(id, dto);
+
+            return Ok();
+
+        }
+        
     }
 }
