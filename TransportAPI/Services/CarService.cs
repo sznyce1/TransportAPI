@@ -45,6 +45,10 @@ namespace TransportAPI.Services
                 .Include(r => r.Runs)
                 .ThenInclude(r => r.Driver)
                 .FirstOrDefault(r => r.Id == id);
+            if (car == null)
+            {
+                throw new NotFoundException("Car not found");
+            }
             var result = _mapper.Map<CarDto>(car);
             return result;
         }
