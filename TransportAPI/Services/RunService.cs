@@ -149,7 +149,7 @@ namespace TransportAPI.Services
             {
                 if (!licence.Contains('a'))
                 {
-                    throw new InvalidArgumentException("invalid driving licence fot this type of vehicle");
+                    throw new InvalidArgumentException("invalid driving licence for this type of vehicle");
                 }
             }
             else if (type.Contains("passenger car"))
@@ -157,21 +157,21 @@ namespace TransportAPI.Services
 
                 if (!licence.Contains('b'))
                 {
-                    throw new InvalidArgumentException("invalid driving licence fot this type of vehicle");
+                    throw new InvalidArgumentException("invalid driving licence for this type of vehicle");
                 }
             }
             else if (type.Contains("truck"))
             {
                 if (!licence.Contains('c'))
                 {
-                    throw new InvalidArgumentException("invalid driving licence fot this type of vehicle");
+                    throw new InvalidArgumentException("invalid driving licence for this type of vehicle");
                 }
             }
             else if (type.Contains("bus"))
             {
                 if (!licence.Contains('d'))
                 {
-                    throw new InvalidArgumentException("invalid driving licence fot this type of vehicle");
+                    throw new InvalidArgumentException("invalid driving licence for this type of vehicle");
                 }
             }
         }
