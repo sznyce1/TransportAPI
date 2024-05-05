@@ -42,6 +42,7 @@ namespace TransportAPI.Services
                 throw new NotFoundException("Run not found");
             }
         }
+
         public IEnumerable<RunDto> GetAll()
         {
             var runs = _dbContext
@@ -52,6 +53,7 @@ namespace TransportAPI.Services
             var rundsDtos = _mapper.Map<List<RunDto>>(runs);
             return rundsDtos;
         }
+
         public int Create(CreateRunDto dto)
         {
             var car = _dbContext
@@ -78,6 +80,7 @@ namespace TransportAPI.Services
 
             return run.Id;
         }
+
         public void Delete(int id)
         {
             var run = _dbContext
@@ -91,6 +94,7 @@ namespace TransportAPI.Services
             _dbContext.SaveChanges(); 
 
         }
+
         public void Update(int id, UpdateRunDto dto)
         {
             var run = _dbContext
@@ -126,6 +130,7 @@ namespace TransportAPI.Services
 
             _dbContext .SaveChanges();
         }
+
         private void ValidateRun(int driverId, int carId)
         {
             var driver = _dbContext

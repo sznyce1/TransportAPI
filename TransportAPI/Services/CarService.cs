@@ -32,6 +32,7 @@ namespace TransportAPI.Services
             var cars = _dbContext
                 .Cars
                 .Include(r => r.Runs)
+                .ThenInclude(r => r.Driver)
                 .ToList();
             var result = _mapper.Map<List<CarDto>>(cars);
             return result;
@@ -42,6 +43,7 @@ namespace TransportAPI.Services
             var car = _dbContext
                 .Cars
                 .Include(r => r.Runs)
+                .ThenInclude(r => r.Driver)
                 .FirstOrDefault(r => r.Id == id);
             var result = _mapper.Map<CarDto>(car);
             return result;

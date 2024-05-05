@@ -32,6 +32,7 @@ namespace TransportAPI.Services
             var drivers = _dbContext
                 .Drivers
                 .Include(r => r.Runs)
+                .ThenInclude(r => r.Car)
                 .ToList();
             var results = _mapper.Map<List<DriverDto>>(drivers);
             return results;
@@ -39,22 +40,17 @@ namespace TransportAPI.Services
 
         public DriverDto GetById(int id)
         {
-            var driver = GetDriver(id);
-            var result = _mapper.Map<DriverDto>(driver);
-            return result;
-        }
-
-        private Driver GetDriver(int id)
-        {
             var driver = _dbContext
                 .Drivers
                 .Include(r => r.Runs)
+                .ThenInclude(r => r.Car)
                 .FirstOrDefault(r => r.Id == id);
             if (driver == null)
             {
                 throw new NotFoundException("Driver not found");
             }
-            return driver;
+            var result = _mapper.Map<DriverDto>(driver);
+            return result;
         }
 
         public int Create(CreateDriverDto dto)
