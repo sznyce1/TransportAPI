@@ -43,6 +43,7 @@ namespace TransportAPI.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {
+            _carService.Delete(id);
             return NoContent();
         }
 

@@ -70,6 +70,9 @@ namespace TransportAPI.Services
             }
                 
             var run = _mapper.Map<Run>(dto);
+
+            ValidateRun(driver.Id, car.Id);
+
             _dbContext.Add(run);
             _dbContext.SaveChanges();
 
@@ -111,6 +114,9 @@ namespace TransportAPI.Services
             {
                 throw new NotFoundException("Driver not found");
             }
+
+            ValidateRun(driver.Id,car.Id);
+
             run.CarId = dto.CarId;
             run.DriverId = dto.DriverId;
             run.StartDate = dto.StartDate;
@@ -119,6 +125,50 @@ namespace TransportAPI.Services
             run.AverageFuelConsumption = dto.AverageFuelConsumption;
 
             _dbContext .SaveChanges();
+        }
+        private void ValidateRun(int driverId, int carId)
+        {
+            var driver = _dbContext
+                .Drivers
+                .FirstOrDefault(r => r.Id == driverId);
+            var car = _dbContext
+                .Cars
+                .FirstOrDefault(r => r.Id == carId);
+            if(car == null || driver == null)
+            {
+                throw new NotFoundException("Driver or car not found");
+            }
+            var type = car.CarType.ToLower();
+            var licence = driver.DrivingCategories.ToLower();
+            if (type.Contains("motorcycle"))
+            {
+                if (!licence.Contains('a'))
+                {
+                    throw new InvalidArgumentException("invalid driving licence fot this type of vehicle");
+                }
+            }
+            else if (type.Contains("passenger car"))
+            {
+
+                if (!licence.Contains('b'))
+                {
+                    throw new InvalidArgumentException("invalid driving licence fot this type of vehicle");
+                }
+            }
+            else if (type.Contains("truck"))
+            {
+                if (!licence.Contains('c'))
+                {
+                    throw new InvalidArgumentException("invalid driving licence fot this type of vehicle");
+                }
+            }
+            else if (type.Contains("bus"))
+            {
+                if (!licence.Contains('d'))
+                {
+                    throw new InvalidArgumentException("invalid driving licence fot this type of vehicle");
+                }
+            }
         }
     }
 }

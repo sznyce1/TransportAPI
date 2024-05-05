@@ -13,6 +13,7 @@ namespace TransportAPI.Services
         public CarDto GetById(int id);
         public int Create(CreateCarDto dto);
         public void Update(int id, UpdateCarDto dto);
+        public void Delete(int id);
     }
 
     public class CarService : ICarService
