@@ -16,8 +16,12 @@ namespace TransportAPI
             {
                 if (!_dbContext.Runs.Any())
                 {
-                    var Runs = GetRuns();
-                    _dbContext.Runs.AddRange(Runs);
+                    var runs = GetRuns();
+                    _dbContext.Runs.AddRange(runs);
+                    var drivers = GetDrivers();
+                    _dbContext.Drivers.AddRange(drivers);
+                    var cars = GetCars();
+                    _dbContext.Cars.AddRange(cars);
                     _dbContext.SaveChanges();
                 }
             }
@@ -28,8 +32,8 @@ namespace TransportAPI
         }
         private IEnumerable<Run> GetRuns()
         {
-            Driver driver = GetDriver();
-            Car car = GetCar();
+            Driver driver = GetDriver("AB");
+            Car car = GetCar("Motorcycle");
             var runs = new List<Run>()
             {
                 new Run()
@@ -53,22 +57,47 @@ namespace TransportAPI
             };
             return runs;
         }
-        private Driver GetDriver()
+        private IEnumerable<Driver> GetDrivers()
+        {
+            var drivers = new List<Driver>()
+            {
+                GetDriver("A"),
+                GetDriver("B"),
+                GetDriver("C"),
+                GetDriver("D"),
+                GetDriver("BC"),
+                GetDriver("BD")
+            };
+            return drivers;
+        }
+        private IEnumerable<Car> GetCars()
+        {
+            var cars = new List<Car>()
+            {
+                GetCar("motorcycle"),
+                GetCar("passenger car"),
+                GetCar("truck"),
+                GetCar("bus")
+
+            };
+            return cars;
+        }
+        private Driver GetDriver(string drivingCategories)
         {
             return new Driver()
             {
                 Name = "TestName",
                 SecondName = "TestSecondName",
-                DrivingCategories = "AB"
+                DrivingCategories = drivingCategories
             };
         }
-        private Car GetCar()
+        private Car GetCar(string carType)
         {
             return new Car()
             {
                 Model = "TestModel",
                 RegistrationNumber = "SK-111555",
-                CarType = "Motorcycle"
+                CarType = carType
             };
         }
     }
