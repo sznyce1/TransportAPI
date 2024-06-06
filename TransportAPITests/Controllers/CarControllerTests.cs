@@ -52,7 +52,22 @@ namespace TransportAPITests.Controllers
         [Fact]
         public async Task Delete_ForNonExistingCar_ReturnsRestaurantNotFound()
         {
-            var response = await _client.DeleteAsync($"api/car/9000");
+            //arrange
+            var car = new Car()
+            {
+                CarType = "skodafabia19",
+                Model = "testmodel",
+                RegistrationNumber = "sz-123456"
+            };
+            //seed
+            var scope = _factory.Services.CreateScope();
+            var dbContext = scope.ServiceProvider.GetService<TransportDbContext>();
+
+            dbContext.Add(car);
+            dbContext.Remove(car);
+            dbContext.SaveChanges();
+
+            var response = await _client.DeleteAsync($"api/car/{car.Id}");
             //assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
