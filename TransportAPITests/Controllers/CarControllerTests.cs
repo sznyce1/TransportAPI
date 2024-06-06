@@ -6,6 +6,9 @@ using TransportAPI;
 using TransportAPI.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using Castle.Components.DictionaryAdapter.Xml;
+using TransportAPI.Models;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace TransportAPITests.Controllers
 {
@@ -73,11 +76,32 @@ namespace TransportAPITests.Controllers
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
         }
 
+        [Fact]
+        public async Task CreateCar_WothValidComponents_ReturnsCreated()
+        {
+            var model = new CreateCarDto()
+            {
+                CarType = "motorcycle",
+                Model = "testmodel",
+                RegistrationNumber = "sz-12345",
+                Runs = new List<RunDto> { }
+                
+            };
+
+            var json = JsonConvert.SerializeObject(model);
+            var httpContent = new StringContent(json, UnicodeEncoding.UTF8, "application/json");
+
+            var response = await _client.PostAsync("/api/car/", httpContent);
+
+            response.StatusCode.Should().Be(HttpStatusCode.Created);
+            //response.Headers.Should().NotBeNull();
+        }
+
         private Car SeedSampleCar()
         {
             var car = new Car()
             {
-                CarType = "skodafabia19",
+                CarType = "testtype",
                 Model = "testmodel",
                 RegistrationNumber = "sz-123456"
             };
