@@ -53,19 +53,8 @@ namespace TransportAPITests.Controllers
         public async Task Delete_ForNonExistingCar_ReturnsRestaurantNotFound()
         {
             //arrange
-            var car = new Car()
-            {
-                CarType = "skodafabia19",
-                Model = "testmodel",
-                RegistrationNumber = "sz-123456"
-            };
-            //seed
-            var scope = _factory.Services.CreateScope();
-            var dbContext = scope.ServiceProvider.GetService<TransportDbContext>();
-
-            dbContext.Add(car);
-            dbContext.Remove(car);
-            dbContext.SaveChanges();
+            Car car = SeedSampleCar();
+            RemoveCar(car);
 
             var response = await _client.DeleteAsync($"api/car/{car.Id}");
             //assert
@@ -76,6 +65,16 @@ namespace TransportAPITests.Controllers
         public async Task Delete_ForExistingRestaurant_ReturnsNoContent()
         {
             //arrange
+            var car = SeedSampleCar();
+            //act
+            var response = await _client.DeleteAsync($"api/car/{car.Id}");
+
+            //assert
+            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        }
+
+        private Car SeedSampleCar()
+        {
             var car = new Car()
             {
                 CarType = "skodafabia19",
@@ -83,16 +82,25 @@ namespace TransportAPITests.Controllers
                 RegistrationNumber = "sz-123456"
             };
             //seed
-            var scope = _factory.Services.CreateScope();
-            var dbContext = scope.ServiceProvider.GetService<TransportDbContext>();
+            var dbContext = GetDbContext();
 
             dbContext.Add(car);
             dbContext.SaveChanges();
-            //act
-            var response = await _client.DeleteAsync($"api/car/{car.Id}");
 
-            //assert
-            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+            return car;
+        }
+
+        private void RemoveCar(Car car)
+        {
+            var dbContext = GetDbContext();
+            dbContext.Remove(car);
+            dbContext.SaveChanges();
+        }
+        private TransportDbContext GetDbContext()
+        {
+            var scope = _factory.Services.CreateScope();
+            var dbContext = scope.ServiceProvider.GetService<TransportDbContext>();
+            return dbContext;
         }
     }
 }
