@@ -77,7 +77,7 @@ namespace TransportAPITests.Controllers
         }
 
         [Fact]
-        public async Task CreateCar_WothValidComponents_ReturnsCreated()
+        public async Task CreateCar_WithValidComponents_ReturnsCreated()
         {
             var model = new CreateCarDto()
             {
@@ -94,7 +94,7 @@ namespace TransportAPITests.Controllers
             var response = await _client.PostAsync("/api/car/", httpContent);
 
             response.StatusCode.Should().Be(HttpStatusCode.Created);
-            //response.Headers.Should().NotBeNull();
+            response.Headers.Should().NotBeNull();
         }
 
         private Car SeedSampleCar()
