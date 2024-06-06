@@ -25,7 +25,15 @@ namespace TransportAPI.Entities
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(_connectionString);
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer(_connectionString);
+            }
+            
+        }
+        public TransportDbContext(DbContextOptions<TransportDbContext> options) : base(options)
+        {
+            
         }
     }
 }
