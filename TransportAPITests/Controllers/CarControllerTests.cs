@@ -53,7 +53,7 @@ namespace TransportAPITests.Controllers
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
         [Fact]
-        public async Task Delete_ForNonExistingCar_ReturnsRestaurantNotFound()
+        public async Task Delete_ForNonExistingCar_ReturnsCarNotFound()
         {
             //arrange
             Car car = SeedSampleCar();
@@ -65,7 +65,7 @@ namespace TransportAPITests.Controllers
         }
 
         [Fact]
-        public async Task Delete_ForExistingRestaurant_ReturnsNoContent()
+        public async Task Delete_ForExistingCar_ReturnsNoContent()
         {
             //arrange
             var car = SeedSampleCar();
