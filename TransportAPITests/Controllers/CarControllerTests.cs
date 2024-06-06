@@ -43,9 +43,9 @@ namespace TransportAPITests.Controllers
         public async Task GetById_GivenExistingId_ReturnsOK()
         {
             //arrange
-            int id = 1;
+            var car = SeedSampleCar();
             //act
-            var response = await _client.GetAsync($"api/car/{id}");
+            var response = await _client.GetAsync($"api/car/{car.Id}");
             //assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
